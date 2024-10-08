@@ -18,6 +18,7 @@ export class PedidoVenda {
     private dataPedido: Date;
     /* valor do pedido */
     private valorPedido: number;
+    setIdPedidoVenda: any;
  
     /**
      * Construtor da classe PedidoVenda.
@@ -145,8 +146,4 @@ export class PedidoVenda {
             return null;
         }
     }
-    setIdPedidoVenda(id: any) {
-        throw new Error("Method not implemented.");
-    }
-
 }
