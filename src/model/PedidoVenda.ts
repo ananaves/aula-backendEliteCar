@@ -1,3 +1,6 @@
+import { DatabaseModel } from "./DatabaseModel";
+
+const database = new DatabaseModel().pool;
 /**
  * Classe que representa um PedidoVenda.
  */
@@ -6,7 +9,7 @@ export class PedidoVenda {
     /* Atributos */
 
     /* Identificador do Pedido */
-    private idPedido: number = 0;
+    private idPedidoVenda: number = 0;
     /* Identificador do carro */
     private idCarro: number = 0;
     /* Identificador do cliente */
@@ -103,6 +106,47 @@ export class PedidoVenda {
      */
     public setvalorpedido(valorPedido: number): void {
         this.valorPedido = valorPedido;
+    }
+
+    /**
+     * O método listarCPedidosVendas executa uma consulta SQL para buscar todos os pedidos e vendas da tabela pedido_vendas no banco de dados.
+     * @returns todos os pedidos e vendas encontrados no banco de dados.
+     */
+
+    static async listarPedidosVenda(): Promise<Array<PedidoVenda> | null> {
+
+        let listaDePedidoVenda: Array<PedidoVenda> = [];
+
+        try {
+
+            const querySelectPedidoVenda = `SELECT * FROM pedido_venda;`;
+
+            const respostaBD = await database.query(querySelectPedidoVenda);
+
+            respostaBD.rows.forEach((pedido_venda) => {
+                let novoPedidoVenda = new PedidoVenda(
+                    pedido_venda.id_carro,
+                    pedido_venda.id_cliente,
+                    pedido_venda.data_pedido,
+                    pedido_venda.valor_pedido,
+                );
+
+                novoPedidoVenda.setIdPedidoVenda(pedido_venda.id);
+
+                listaDePedidoVenda.push(novoPedidoVenda);
+
+            });    
+            
+            return listaDePedidoVenda;
+
+
+        } catch (error) {
+            console.log(`Erro ao acessar o modelo: ${error}`);
+            return null;
+        }
+    }
+    setIdPedidoVenda(id: any) {
+        throw new Error("Method not implemented.");
     }
 
 }

@@ -1,3 +1,7 @@
+import { DatabaseModel } from "./DatabaseModel";
+
+const database = new DatabaseModel().pool;
+
 /**
  * Classe que representa o cliente.
  */
@@ -106,4 +110,41 @@ export class Cliente {
         this.telefone = telefone;
     }
 
+    /**
+     * O método listarClientes executa uma consulta SQL para buscar todos os clientes da tabela cliente no banco de dados.
+     * @returns todos os clientes encontrados no banco de dados.
+     */
+
+    static async listarClientes(): Promise<Array<Cliente> | null> {
+
+        let listaDeClientes: Array<Cliente> = [];
+
+        try {
+
+            const querySelectCliente = `SELECT * FROM cliente;`;
+
+            const respostaBD = await database.query(querySelectCliente);
+
+            respostaBD.rows.forEach((cliente) => {
+                let novoCliente = new Cliente(
+                    cliente.nome,
+                    cliente.cpf,
+                    cliente.telefone,
+                    
+                );
+
+                novoCliente.setIdCliente(cliente.id);
+
+                listaDeClientes.push(novoCliente);
+
+            });    
+            
+            return listaDeClientes;
+
+
+        } catch (error) {
+            console.log(`Erro ao acessar o modelo: ${error}`);
+            return null;
+        }
+    }
 }

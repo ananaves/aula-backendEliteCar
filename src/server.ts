@@ -7,6 +7,9 @@ server.use(cors());
 
 server.use(express.json());
 
+
+/**Configurando o roteador */
 server.use(router);
 
+/**Exportando o servidor */
 export {server};
